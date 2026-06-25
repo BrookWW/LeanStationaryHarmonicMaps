@@ -1,3 +1,5 @@
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.AbsolutelyContinuousFun
+import Mathlib.Topology.Order.IsLocallyClosed
 import LeanStationaryHarmonicMaps.StationaryHarmonicMap.RadiusAnalysis
 
 noncomputable section

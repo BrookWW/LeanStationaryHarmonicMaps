@@ -1,3 +1,4 @@
+import Mathlib.Analysis.Distribution.AEEqOfIntegralContDiff
 import LeanStationaryHarmonicMaps.StationaryHarmonicMap.RadiusWeights
 import LeanStationaryHarmonicMaps.StationaryHarmonicMap.RadialIdentity
 
@@ -14,6 +15,10 @@ namespace StationaryHarmonicMap
 
 This module contains the boundary identities and the abstract one-dimensional
 radius/coarea interfaces used by the weak monotonicity proof.
+
+These interfaces are internal scaffolding: they expose the intermediate
+boundary and radius statements so the proof can be checked modularly, but they
+are not intended as the public API of the project.
 -/
 
 /-- The a.e. boundary identity

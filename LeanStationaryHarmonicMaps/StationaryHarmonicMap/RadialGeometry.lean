@@ -1,3 +1,4 @@
+import Mathlib.Analysis.InnerProductSpace.Calculus
 import LeanStationaryHarmonicMaps.StationaryHarmonicMap.Euclidean
 
 noncomputable section

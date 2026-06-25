@@ -1,3 +1,5 @@
+import Mathlib.MeasureTheory.Constructions.HaarToSphere
+import Mathlib.MeasureTheory.VectorMeasure.Decomposition.RadonNikodym
 import LeanStationaryHarmonicMaps.StationaryHarmonicMap.Basic
 
 noncomputable section

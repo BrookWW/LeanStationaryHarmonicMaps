@@ -1,3 +1,4 @@
+import Mathlib.Analysis.Calculus.BumpFunction.InnerProduct
 import LeanStationaryHarmonicMaps.StationaryHarmonicMap.RadialGeometry
 
 noncomputable section

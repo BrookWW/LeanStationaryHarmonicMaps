@@ -1,3 +1,4 @@
+import Mathlib.MeasureTheory.Measure.Lebesgue.VolumeOfBalls
 import LeanStationaryHarmonicMaps.StationaryHarmonicMap.Basic
 
 noncomputable section

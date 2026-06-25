@@ -1,3 +1,4 @@
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.DerivIntegrable
 import LeanStationaryHarmonicMaps.StationaryHarmonicMap.PrimitiveCutoffs
 import LeanStationaryHarmonicMaps.StationaryHarmonicMap.Euclidean
 
@@ -14,6 +15,10 @@ namespace StationaryHarmonicMap
 
 This module contains the abstract absolute-continuity and integration-by-parts
 interfaces for the radius-variable energy functions.
+
+These radius formulas are internal scaffolding.  They remain visible so the
+coarea and one-dimensional calculus steps can be audited independently, while
+public users should rely on `MainTheorem.lean`.
 -/
 
 /-- The one-dimensional integration-by-parts step to be proved from

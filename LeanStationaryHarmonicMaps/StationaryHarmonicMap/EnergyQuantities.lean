@@ -1,3 +1,4 @@
+import Mathlib.MeasureTheory.Function.AbsolutelyContinuous
 import LeanStationaryHarmonicMaps.StationaryHarmonicMap.WeakStationarity
 
 noncomputable section
