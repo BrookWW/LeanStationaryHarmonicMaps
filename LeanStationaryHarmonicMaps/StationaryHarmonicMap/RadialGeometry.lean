@@ -69,7 +69,7 @@ def radialDerivative {n m : ℕ} (u : Domain n → Target m) (a x : Domain n) : 
 
 /-- Smooth-model Dirichlet energy density: `|∇u|² = ∑ᵢ |∂ᵢ u|²`.
 
-Do not replace this by the operator norm squared of `fderiv`; the harmonic-map energy uses the
+Do not replace this by the operator norm squared of `fderiv`; the Dirichlet energy density uses the
 Hilbert-Schmidt/Frobenius norm of the derivative. -/
 def energyDensity {n m : ℕ} (u : Domain n → Target m) (x : Domain n) : ℝ :=
   ∑ i : Fin n, ‖partialDerivative u i x‖ ^ 2

@@ -6,10 +6,11 @@ open MeasureTheory Set
 open scoped Topology BigOperators ENNReal
 
 /-!
-# Stationary harmonic map monotonicity
+# Stationary Sobolev map monotonicity
 
-This is the public entry point for the stationary harmonic map monotonicity
-formalization.  The proof is split across smaller modules below this import.
+This file records the original weak-map monotonicity endpoint used by the
+newer public witness API.  The proof is split across smaller modules below
+this import.
 
 The current proved endpoint is
 `weakTheta_le_of_arbitrary_center_W12Loc_euclidean`.  Future Sobolev bridge
@@ -20,8 +21,8 @@ theorem, rather than reopening the radial monotonicity proof chain.
 namespace LeanStationaryHarmonicMaps
 namespace StationaryHarmonicMap
 
-/-- Euclidean weak monotonicity in the interval form usually used in the
-stationary harmonic map monotonicity formula. -/
+/-- Euclidean-target weak monotonicity in interval form for domain-variation
+stationary Sobolev maps. -/
 theorem weakTheta_le_of_W12Loc_euclidean
     {n m : ℕ} [NeZero n]
     {u : Domain n → Target m} {Du : Domain n → Gradient n m} {Ω : Set (Domain n)}

@@ -1,4 +1,4 @@
-import LeanStationaryHarmonicMaps.StationaryHarmonicMap.API
+import LeanStationaryHarmonicMaps.StationaryHarmonicMap.MainTheorem
 
 noncomputable section
 
@@ -9,11 +9,12 @@ namespace LeanStationaryHarmonicMaps
 namespace StationaryHarmonicMap
 
 /-!
-# Minimal use of the public monotonicity API
+# Using the main theorem directly
 
-This file is intentionally small: it checks that an external caller can import
-the public API and apply both the witness-style stationary Sobolev monotonicity
-theorem and the older componentwise convenience wrapper.
+This example imports only `MainTheorem.lean`.  A caller supplies a
+`StationaryW12LocMap` package and immediately obtains the monotonicity
+inequality for the weak energy density associated with the package's displayed
+weak gradient.
 -/
 
 example
@@ -32,8 +33,8 @@ example
     (a := a) (R0 := R0) (s := s) (r := r)
     hOmega_meas hclosedBall_subset hs_pos hsr hr_lt
 
-/-- The componentwise calling style remains available as a convenience wrapper
-around the witness-style theorem. -/
+/-- Component hypotheses can still be assembled into the package expected by
+the main theorem. -/
 example
     {n m : Nat} [NeZero n]
     {u : Domain n -> Target m} {Du : Domain n -> Gradient n m}
@@ -48,12 +49,16 @@ example
     (hs_pos : 0 < s)
     (hsr : s <= r)
     (hr_lt : r < R0) :
-    weakTheta Du a s <= weakTheta Du a r :=
-  stationarySobolevMonotonicity_euclidean
-    (n := n) (m := m) (u := u) (Du := Du) (Omega := Omega)
-    (a := a) (R0 := R0) (s := s) (r := r)
-    hu_memLp hDu_aesm hDu_memLp hweakGradient hfirstVariation
-    hOmega_meas hclosedBall_subset hs_pos hsr hr_lt
+    weakTheta Du a s <= weakTheta Du a r := by
+  let hmap : StationaryW12LocMap u Omega :=
+    StationaryW12LocMap.of_components
+      (u := u) (Du := Du) (Omega := Omega)
+      hu_memLp hDu_aesm hDu_memLp hweakGradient hfirstVariation
+  exact
+    stationaryW12LocMonotonicity_euclidean
+      (n := n) (m := m) (u := u) (Omega := Omega) hmap
+      (a := a) (R0 := R0) (s := s) (r := r)
+      hOmega_meas hclosedBall_subset hs_pos hsr hr_lt
 
 end StationaryHarmonicMap
 end LeanStationaryHarmonicMaps

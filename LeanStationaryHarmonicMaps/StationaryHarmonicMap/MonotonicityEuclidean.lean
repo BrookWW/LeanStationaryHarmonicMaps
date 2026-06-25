@@ -14,6 +14,10 @@ namespace StationaryHarmonicMap
 
 This module contains the strongest Euclidean and restricted-weight packaged
 weak monotonicity interfaces.
+
+This file is still part of the internal proof route: it closes the Euclidean
+coarea and thin-shell ingredients before `MainTheorem.lean` packages the final
+user-facing statement.
 -/
 
 /-- Current strongest packaged weak-map monotonicity interface: primitive

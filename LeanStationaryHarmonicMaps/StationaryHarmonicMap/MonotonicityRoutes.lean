@@ -13,6 +13,10 @@ namespace StationaryHarmonicMap
 
 This module contains the main packaged weak monotonicity routes up to the
 thin-shell and primitive-cutoff interfaces.
+
+These declarations are internal scaffolding for the proof architecture.  User
+code should normally import `MainTheorem.lean` or `API.lean` instead of relying
+on a particular route theorem in this file.
 -/
 
 /-- End-to-end weak monotonicity route from radial stationarity, after splitting

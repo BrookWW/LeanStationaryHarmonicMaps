@@ -13,6 +13,10 @@ namespace StationaryHarmonicMap
 
 This module turns one-dimensional cutoff, coarea, and integration-by-parts
 inputs into the weak boundary identity.
+
+The theorems here are internal scaffolding for the proof route from radial
+stationarity to the boundary identity.  The recommended public entry point is
+the final theorem in `MainTheorem.lean`.
 -/
 
 /-- Energy integration by parts plus integrability of the expanded terms gives

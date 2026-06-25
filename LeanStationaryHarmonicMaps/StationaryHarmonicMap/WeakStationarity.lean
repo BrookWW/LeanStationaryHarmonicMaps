@@ -8,7 +8,7 @@ open scoped Topology BigOperators ENNReal
 namespace LeanStationaryHarmonicMaps
 namespace StationaryHarmonicMap
 
-/-- The stationary harmonic map integrand
+/-- The smooth domain-variation stationarity integrand
 `|∇u|² div X - 2 ∑ᵢⱼ <∂ᵢu, ∂ⱼu> ∂ᵢXⱼ`. -/
 def stationarityIntegrand {n m : ℕ}
     (u : Domain n → Target m) (X : Domain n → Domain n) (x : Domain n) : ℝ :=

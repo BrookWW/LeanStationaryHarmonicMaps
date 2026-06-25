@@ -7,7 +7,7 @@ open MeasureTheory Set
 open scoped Topology BigOperators ENNReal
 
 /-!
-# Sobolev bridge for stationary harmonic map monotonicity
+# Sobolev bridge for stationary Sobolev map monotonicity
 
 This module is the controlled entry point for replacing the custom
 `WeakStationaryMapIn` hypothesis by progressively more standard Sobolev

@@ -1,5 +1,5 @@
 import LeanStationaryHarmonicMaps.StationaryHarmonicMap.Euclidean
-import LeanStationaryHarmonicMaps.StationaryHarmonicMap.StationarityBridge
+import LeanStationaryHarmonicMaps.StationaryHarmonicMap.MainTheorem
 
 noncomputable section
 
@@ -7,17 +7,23 @@ open MeasureTheory Set
 open scoped Topology BigOperators ENNReal
 
 /-!
-# Public API for stationary harmonic map monotonicity
+# Public API for stationary Sobolev map monotonicity
 
 This module is the intended public entry point for the stationary
-`W^{1,2}_{loc}` monotonicity theorem.  The main user-facing objects are:
+`W^{1,2}_{loc}` monotonicity theorem.  The proof is target independent: it
+uses the displayed weak gradient and the domain-variation first-variation
+identity, but no target-manifold structure.
+
+The main user-facing objects are:
 
 * `LocallyMemLpTwoIn`
 * `GradientLocallyMemLpTwoIn`
 * `CompactlySupportedC1In`
 * `DistributionalWeakGradientIn`
 * `DomainVariationStationaryIn`
-* `StationarySobolevMapIn`
+* `W12LocMapWitness`
+* `StationaryW12LocMap`
+* `stationaryW12LocMonotonicity_euclidean`
 * `stationarySobolevMonotonicity_euclidean`
 
 Implementation-route theorems in the radial/coarea files should normally be
@@ -27,32 +33,34 @@ treated as internal scaffolding.
 namespace LeanStationaryHarmonicMaps
 namespace StationaryHarmonicMap
 
-/-- Public componentwise monotonicity theorem.
+/-- Componentwise convenience wrapper for the witness-style monotonicity
+theorem.
 
-This is the recommended entry point when the stationary Sobolev data are
-available as separate hypotheses: local `L²` control of `u`, a.e. strong
-measurability and local `L²` control of `Du`, the distributional weak-gradient
-identity, and vanishing domain first variation. -/
+The preferred public API is `stationaryW12LocMonotonicity_euclidean`, where the
+chosen weak gradient is bundled in a `StationaryW12LocMap`.  This theorem keeps
+the old componentwise calling style by constructing that witness package first. -/
 theorem stationarySobolevMonotonicity_euclidean
-    {n m : ℕ} [NeZero n]
-    {u : Domain n → Target m} {Du : Domain n → Gradient n m}
-    {Ω : Set (Domain n)} {a : Domain n} {R0 s r : ℝ}
-    (hu_memLp : LocallyMemLpTwoIn u Ω)
-    (hDu_aesm : GradientAEStronglyMeasurableIn Du Ω)
-    (hDu_memLp : LocallyMemLpTwoIn Du Ω)
-    (hweakGradient : DistributionalWeakGradientIn u Du Ω)
-    (hfirstVariation : DomainVariationStationaryIn u Du Ω)
-    (hΩ_meas : MeasurableSet Ω)
-    (hclosedBall_subset : Metric.closedBall a R0 ⊆ Ω)
+    {n m : Nat} [NeZero n]
+    {u : Domain n -> Target m} {Du : Domain n -> Gradient n m}
+    {Omega : Set (Domain n)} {a : Domain n} {R0 s r : Real}
+    (hu_memLp : LocallyMemLpTwoIn u Omega)
+    (hDu_aesm : GradientAEStronglyMeasurableIn Du Omega)
+    (hDu_memLp : LocallyMemLpTwoIn Du Omega)
+    (hweakGradient : DistributionalWeakGradientIn u Du Omega)
+    (hfirstVariation : DomainVariationStationaryIn u Du Omega)
+    (hOmega_meas : MeasurableSet Omega)
+    (hclosedBall_subset : Set.Subset (Metric.closedBall a R0) Omega)
     (hs_pos : 0 < s)
-    (hsr : s ≤ r)
+    (hsr : s <= r)
     (hr_lt : r < R0) :
-    weakTheta Du a s ≤ weakTheta Du a r :=
-  weakTheta_le_of_stationary_sobolev_map_components_euclidean
-    (n := n) (m := m) (u := u) (Du := Du) (Ω := Ω) (a := a) (R0 := R0)
-    (s := s) (r := r)
-    hu_memLp hDu_aesm hDu_memLp hweakGradient hfirstVariation
-    hΩ_meas hclosedBall_subset hs_pos hsr hr_lt
+    weakTheta Du a s <= weakTheta Du a r :=
+  stationaryW12LocMonotonicity_euclidean
+    (n := n) (m := m) (u := u) (Omega := Omega)
+    (StationaryW12LocMap.of_components
+      (u := u) (Du := Du) (Omega := Omega)
+      hu_memLp hDu_aesm hDu_memLp hweakGradient hfirstVariation)
+    (a := a) (R0 := R0) (s := s) (r := r)
+    hOmega_meas hclosedBall_subset hs_pos hsr hr_lt
 
 end StationaryHarmonicMap
 end LeanStationaryHarmonicMaps
