@@ -118,6 +118,7 @@ The writing scaffold in `docs/paper-outline.md` contains:
 * the internal proof-route diagram;
 * a comparison with the DGM Sobolev witness strategy;
 * the target-independence explanation;
+* explicit non-goals;
 * limitations and the future manifold-wrapper shape.
 
 ## Main Files
@@ -142,6 +143,20 @@ The project does not aim to provide a full manifold-valued target theory.
 The monotonicity theorem is stated for Euclidean targets because the proof uses
 only weak gradients and domain variations. Target-manifold constraints can be
 added later as a thin wrapper that supplies `StationaryW12LocMap`.
+
+## Non-goals
+
+This repository deliberately does not try to be:
+
+* a full manifold-valued Sobolev theory;
+* a heat-flow formalization;
+* a regularity or epsilon-regularity development;
+* a partial-regularity formalization;
+* a general-purpose Sobolev library.
+
+These non-goals are part of the design. The project isolates the monotonicity
+formula from heavier surrounding theories, while leaving room for thin wrappers
+around the final `StationaryW12LocMap` API.
 
 ## Verification Status
 

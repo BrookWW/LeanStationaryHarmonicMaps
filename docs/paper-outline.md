@@ -128,14 +128,25 @@ core theorem. A future manifold wrapper should prove that a particular embedded
 manifold-valued notion of stationarity supplies a `StationaryW12LocMap` and
 then call `stationaryW12LocMonotonicity_euclidean`.
 
+## Non-goals
+
+This project deliberately does not formalize:
+
+* a full manifold-valued Sobolev theory;
+* heat flow for maps;
+* regularity or epsilon-regularity;
+* partial regularity;
+* a general-purpose Sobolev library.
+
+These exclusions are not temporary gaps in the monotonicity proof. They keep
+the API focused on the domain-variation theorem and prevent the public
+statement from depending on heavier theories that the proof itself never uses.
+
 ## Limitations And Future Wrapper
 
 Current limitations:
 
 * The target is Euclidean in the formal theorem.
-* The Sobolev layer is project-defined, not a general mathlib Sobolev library.
-* The theorem proves monotonicity, not epsilon regularity or partial
-  regularity.
 * Manifold-valued maps are not yet packaged as a public wrapper.
 
 Possible future wrapper:
