@@ -21,3 +21,5 @@ jobs:
       - name: Build public example
         run: lake build LeanStationaryHarmonicMaps.Examples.StationaryMonotonicity
       - uses: leanprover-community/docgen-action@v1
+        with:
+          build-page: false
