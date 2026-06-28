@@ -81,6 +81,25 @@ theorem weakTheta_le_of_stationary_sobolev_map_euclidean
     (s := s) (r := r)
     hmap.toWeakStationaryMapIn hΩ_meas hclosedBall_subset hs_pos hsr hr_lt
 
+/-- Final paper-facing arbitrary-center Euclidean monotonicity formula for the
+current stationary Sobolev bridge package. -/
+theorem weakTheta_increment_eq_weakMonotonicityRhs_of_stationary_sobolev_map_euclidean
+    {n m : ℕ} [NeZero n]
+    {u : Domain n → Target m} {Du : Domain n → Gradient n m}
+    {Ω : Set (Domain n)} {a : Domain n} {R0 s r : ℝ}
+    (hmap : StationarySobolevMapIn u Du Ω)
+    (hΩ_meas : MeasurableSet Ω)
+    (hclosedBall_subset : Metric.closedBall a R0 ⊆ Ω)
+    (hs_pos : 0 < s)
+    (hsr : s < r)
+    (hr_lt : r < R0) :
+    weakTheta Du a r - weakTheta Du a s =
+      weakMonotonicityRhs Du a s r :=
+  weakTheta_increment_eq_weakMonotonicityRhs_of_arbitrary_center_W12Loc_euclidean
+    (n := n) (m := m) (u := u) (Du := Du) (Ω := Ω) (a := a) (R0 := R0)
+    (s := s) (r := r)
+    hmap.toWeakStationaryMapIn hΩ_meas hclosedBall_subset hs_pos hsr hr_lt
+
 /-- Final componentwise entry point: the monotonicity theorem stated directly
 from the five stationary `W^{1,2}_{loc}` hypotheses, without asking callers to
 manually assemble the intermediate packages. -/
@@ -100,6 +119,31 @@ theorem weakTheta_le_of_stationary_sobolev_map_components_euclidean
     (hr_lt : r < R0) :
     weakTheta Du a s ≤ weakTheta Du a r :=
   weakTheta_le_of_stationary_sobolev_map_euclidean
+    (n := n) (m := m) (u := u) (Du := Du) (Ω := Ω) (a := a) (R0 := R0)
+    (s := s) (r := r)
+    (stationarySobolevMapIn_of_components
+      hu_memLp hDu_aesm hDu_memLp hweakGradient hfirstVariation)
+    hΩ_meas hclosedBall_subset hs_pos hsr hr_lt
+
+/-- Final componentwise entry point for the monotonicity increment formula,
+stated directly from the five stationary `W^{1,2}_{loc}` hypotheses. -/
+theorem weakTheta_increment_eq_weakMonotonicityRhs_of_stationary_sobolev_map_components_euclidean
+    {n m : ℕ} [NeZero n]
+    {u : Domain n → Target m} {Du : Domain n → Gradient n m}
+    {Ω : Set (Domain n)} {a : Domain n} {R0 s r : ℝ}
+    (hu_memLp : LocallyMemLpTwoIn u Ω)
+    (hDu_aesm : GradientAEStronglyMeasurableIn Du Ω)
+    (hDu_memLp : LocallyMemLpTwoIn Du Ω)
+    (hweakGradient : DistributionalWeakGradientIn u Du Ω)
+    (hfirstVariation : DomainVariationStationaryIn u Du Ω)
+    (hΩ_meas : MeasurableSet Ω)
+    (hclosedBall_subset : Metric.closedBall a R0 ⊆ Ω)
+    (hs_pos : 0 < s)
+    (hsr : s < r)
+    (hr_lt : r < R0) :
+    weakTheta Du a r - weakTheta Du a s =
+      weakMonotonicityRhs Du a s r :=
+  weakTheta_increment_eq_weakMonotonicityRhs_of_stationary_sobolev_map_euclidean
     (n := n) (m := m) (u := u) (Du := Du) (Ω := Ω) (a := a) (R0 := R0)
     (s := s) (r := r)
     (stationarySobolevMapIn_of_components

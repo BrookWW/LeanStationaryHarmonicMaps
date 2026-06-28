@@ -76,6 +76,50 @@ theorem weakTheta_le_of_centered_W12Loc_euclidean
       hR0_pos.le hmap_centered hΩ_meas hclosedBall_subset)
       hs_mem hr_mem hsr
 
+/-- Auxiliary arbitrary-center Euclidean weak increment formula for an already
+recentered weak stationary map package. -/
+theorem weakTheta_increment_eq_weakMonotonicityRhs_of_centered_W12Loc_euclidean
+    {n m : ℕ} [NeZero n]
+    {u : Domain n → Target m} {Du : Domain n → Gradient n m}
+    {Ω : Set (Domain n)} {a : Domain n} {R0 s r : ℝ}
+    (hmap_centered :
+      WeakStationaryMapIn
+        (fun x : Domain n => u (a + x))
+        (translateGradient a Du)
+        (centeredDomain a Ω))
+    (hΩ_meas : MeasurableSet Ω)
+    (hclosedBall_subset : Metric.closedBall a R0 ⊆ Ω)
+    (hs_pos : 0 < s)
+    (hsr : s < r)
+    (hr_lt : r < R0) :
+    weakTheta Du a r - weakTheta Du a s =
+      weakMonotonicityRhs Du a s r := by
+  have hzero :
+      weakTheta (translateGradient a Du) (0 : Domain n) r -
+          weakTheta (translateGradient a Du) (0 : Domain n) s =
+        weakMonotonicityRhs (translateGradient a Du) (0 : Domain n) s r :=
+    weakTheta_increment_eq_weakMonotonicityRhs_from_W12Loc_euclidean
+      (n := n) (m := m)
+      (u := fun x : Domain n => u (a + x))
+      (Du := translateGradient a Du)
+      (Ω := centeredDomain a Ω) (R0 := R0) (s := s) (r := r)
+      hmap_centered
+      (measurableSet_centeredDomain (a := a) hΩ_meas)
+      (closedBall_subset_centeredDomain_of_closedBall_subset
+        (a := a) hclosedBall_subset)
+      hs_pos hsr hr_lt
+  calc
+    weakTheta Du a r - weakTheta Du a s
+        =
+      weakTheta (translateGradient a Du) (0 : Domain n) r -
+        weakTheta (translateGradient a Du) (0 : Domain n) s := by
+        simp [weakTheta_translateGradient_zero (Du := Du) (a := a)]
+    _ =
+      weakMonotonicityRhs (translateGradient a Du) (0 : Domain n) s r := hzero
+    _ =
+      weakMonotonicityRhs Du a s r :=
+        weakMonotonicityRhs_translateGradient_zero Du a s r
+
 /-- Frozen public endpoint for the current custom weak interface: arbitrary-
 center Euclidean weak monotonicity in interval form, directly from the
 original-coordinate weak stationary map package. -/
@@ -96,6 +140,27 @@ theorem weakTheta_le_of_arbitrary_center_W12Loc_euclidean
       (s := s) (r := r)
       (weakStationaryMapIn_centeredDomain (a := a) hmap hΩ_meas)
       hΩ_meas hclosedBall_subset hs_pos hsr hr_lt
+
+/-- Frozen public endpoint for the current custom weak interface: arbitrary-
+center Euclidean weak monotonicity formula in increment form, directly from the
+original-coordinate weak stationary map package. -/
+theorem weakTheta_increment_eq_weakMonotonicityRhs_of_arbitrary_center_W12Loc_euclidean
+    {n m : ℕ} [NeZero n]
+    {u : Domain n → Target m} {Du : Domain n → Gradient n m}
+    {Ω : Set (Domain n)} {a : Domain n} {R0 s r : ℝ}
+    (hmap : WeakStationaryMapIn u Du Ω)
+    (hΩ_meas : MeasurableSet Ω)
+    (hclosedBall_subset : Metric.closedBall a R0 ⊆ Ω)
+    (hs_pos : 0 < s)
+    (hsr : s < r)
+    (hr_lt : r < R0) :
+    weakTheta Du a r - weakTheta Du a s =
+      weakMonotonicityRhs Du a s r :=
+  weakTheta_increment_eq_weakMonotonicityRhs_of_centered_W12Loc_euclidean
+    (n := n) (m := m) (u := u) (Du := Du) (Ω := Ω) (a := a) (R0 := R0)
+    (s := s) (r := r)
+    (weakStationaryMapIn_centeredDomain (a := a) hmap hΩ_meas)
+    hΩ_meas hclosedBall_subset hs_pos hsr hr_lt
 
 end StationaryHarmonicMap
 end LeanStationaryHarmonicMaps

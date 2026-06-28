@@ -32,7 +32,20 @@ Sobolev witness.
 
 ## Lean Statement
 
-The preferred Lean theorem is:
+The preferred Lean formula theorem is:
+
+```lean
+stationaryW12LocMonotonicityFormula_euclidean
+```
+
+It gives:
+
+```lean
+weakTheta hmap.w12.weakGrad a r - weakTheta hmap.w12.weakGrad a s =
+  weakMonotonicityRhs hmap.w12.weakGrad a s r
+```
+
+The monotonicity inequality is also exposed as:
 
 ```lean
 stationaryW12LocMonotonicity_euclidean
@@ -66,7 +79,7 @@ rather than relying on a monolithic mathlib Sobolev object.
 ```mermaid
 flowchart TD
   A["SobolevWitness.lean<br/>W12LocMapWitness"] --> B["StationaryMap.lean<br/>StationaryW12LocMap"]
-  B --> C["MainTheorem.lean<br/>stationaryW12LocMonotonicity_euclidean"]
+  B --> C["MainTheorem.lean<br/>formula and inequality theorems"]
   C --> D["API.lean<br/>public facade and wrapper"]
   C --> E["Examples/UseMainTheorem.lean"]
   F["Internal radial/coarea/boundary scaffolding"] --> C
@@ -126,7 +139,8 @@ It uses only the stress-energy/domain-variation identity written in terms of the
 displayed weak gradient. This makes the Euclidean-target statement the right
 core theorem. A future manifold wrapper should prove that a particular embedded
 manifold-valued notion of stationarity supplies a `StationaryW12LocMap` and
-then call `stationaryW12LocMonotonicity_euclidean`.
+then call `stationaryW12LocMonotonicityFormula_euclidean` or
+`stationaryW12LocMonotonicity_euclidean`.
 
 ## Non-goals
 
@@ -158,6 +172,9 @@ structure EmbeddedTargetStationaryMap where
 
 theorem EmbeddedTargetStationaryMap.monotonicity ... :=
   stationaryW12LocMonotonicity_euclidean ...
+
+theorem EmbeddedTargetStationaryMap.monotonicity_formula ... :=
+  stationaryW12LocMonotonicityFormula_euclidean ...
 ```
 
 The wrapper should be thin: it should not reopen the radial monotonicity proof.

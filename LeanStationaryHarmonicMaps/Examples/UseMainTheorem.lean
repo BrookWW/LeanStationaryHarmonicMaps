@@ -12,10 +12,27 @@ namespace StationaryHarmonicMap
 # Using the main theorem directly
 
 This example imports only `MainTheorem.lean`.  A caller supplies a
-`StationaryW12LocMap` package and immediately obtains the monotonicity
-inequality for the weak energy density associated with the package's displayed
-weak gradient.
+`StationaryW12LocMap` package and immediately obtains both the monotonicity
+formula and the monotonicity inequality for the weak energy density associated
+with the package's displayed weak gradient.
 -/
+
+example
+    {n m : Nat} [NeZero n]
+    {u : Domain n -> Target m} {Omega : Set (Domain n)}
+    (hmap : StationaryW12LocMap u Omega)
+    {a : Domain n} {R0 s r : Real}
+    (hOmega_meas : MeasurableSet Omega)
+    (hclosedBall_subset : Set.Subset (Metric.closedBall a R0) Omega)
+    (hs_pos : 0 < s)
+    (hsr : s < r)
+    (hr_lt : r < R0) :
+    weakTheta hmap.w12.weakGrad a r - weakTheta hmap.w12.weakGrad a s =
+      weakMonotonicityRhs hmap.w12.weakGrad a s r :=
+  stationaryW12LocMonotonicityFormula_euclidean
+    (n := n) (m := m) (u := u) (Omega := Omega) hmap
+    (a := a) (R0 := R0) (s := s) (r := r)
+    hOmega_meas hclosedBall_subset hs_pos hsr hr_lt
 
 example
     {n m : Nat} [NeZero n]

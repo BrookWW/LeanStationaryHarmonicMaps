@@ -506,6 +506,65 @@ theorem weakTheta_translateGradient_zero
       weakTheta Du a r := by
   simp [weakTheta, weakBallEnergy_translateGradient_zero]
 
+/-- The weak radial derivative is unchanged by recentering coordinates. -/
+theorem weakRadialDerivative_translateGradient_zero
+    {n m : ℕ} (Du : Domain n → Gradient n m) (a x : Domain n) :
+    weakRadialDerivative (translateGradient a Du) (0 : Domain n) x =
+      weakRadialDerivative Du a (a + x) := by
+  simp [weakRadialDerivative, translateGradient, sub_eq_add_neg, add_assoc]
+
+/-- The weak radial-energy density is unchanged by recentering coordinates. -/
+theorem weakRadialEnergyDensity_translateGradient_zero
+    {n m : ℕ} (Du : Domain n → Gradient n m) (a x : Domain n) :
+    weakRadialEnergyDensity (translateGradient a Du) (0 : Domain n) x =
+      weakRadialEnergyDensity Du a (a + x) := by
+  simp [weakRadialEnergyDensity, weakRadialDerivative_translateGradient_zero]
+
+/-- The annular right-hand side in the weak monotonicity formula is unchanged
+after recentering coordinates. -/
+theorem weakMonotonicityRhs_translateGradient_zero
+    {n m : ℕ} (Du : Domain n → Gradient n m) (a : Domain n) (s r : ℝ) :
+    weakMonotonicityRhs (translateGradient a Du) (0 : Domain n) s r =
+      weakMonotonicityRhs Du a s r := by
+  let e : Domain n → Domain n := fun x => a + x
+  let ann : Set (Domain n) := Metric.ball a r \ Metric.ball a s
+  have hann_meas : MeasurableSet ann :=
+    (Metric.isOpen_ball.measurableSet).diff Metric.isOpen_ball.measurableSet
+  have hpre :
+      e ⁻¹' ann = Metric.ball (0 : Domain n) r \ Metric.ball (0 : Domain n) s := by
+    ext x
+    simp [e, ann, Metric.mem_ball, dist_eq_norm]
+  have hchange :
+      (∫ x in e ⁻¹' ann,
+          ‖a + x - a‖ ^ (2 - (n : ℤ)) *
+            weakRadialEnergyDensity Du a (a + x))
+        =
+      ∫ x in ann,
+          ‖x - a‖ ^ (2 - (n : ℤ)) * weakRadialEnergyDensity Du a x := by
+    simpa [e, ann] using
+      setIntegral_preimage_add_left_eq
+        (n := n)
+        (f := fun x : Domain n =>
+          ‖x - a‖ ^ (2 - (n : ℤ)) * weakRadialEnergyDensity Du a x)
+        a hann_meas
+  calc
+    weakMonotonicityRhs (translateGradient a Du) (0 : Domain n) s r
+        =
+      2 * ∫ x in Metric.ball (0 : Domain n) r \ Metric.ball (0 : Domain n) s,
+          ‖x‖ ^ (2 - (n : ℤ)) *
+            weakRadialEnergyDensity Du a (a + x) := by
+        simp [weakMonotonicityRhs, weakRadialEnergyDensity_translateGradient_zero]
+    _ =
+      2 * ∫ x in e ⁻¹' ann,
+          ‖a + x - a‖ ^ (2 - (n : ℤ)) *
+            weakRadialEnergyDensity Du a (a + x) := by
+        rw [hpre]
+        simp [sub_eq_add_neg, add_assoc]
+    _ =
+      weakMonotonicityRhs Du a s r := by
+        rw [hchange]
+        simp [weakMonotonicityRhs, ann]
+
 /-- Arbitrary-center Euclidean weak monotonicity, reduced to the origin-centered
 theorem for the translated map and translated weak gradient. -/
 theorem weakTheta_monotone_from_centered_W12Loc_euclidean

@@ -9,7 +9,20 @@ used in the monotonicity argument. An embedded manifold-valued application can
 therefore call this theorem after supplying the usual stationary Sobolev data
 and first-variation identity.
 
-The public theorem is:
+The public monotonicity formula is:
+
+```lean
+stationaryW12LocMonotonicityFormula_euclidean
+```
+
+It proves, for `0 < s < r < R0`,
+
+```lean
+weakTheta hmap.w12.weakGrad a r - weakTheta hmap.w12.weakGrad a s =
+  weakMonotonicityRhs hmap.w12.weakGrad a s r
+```
+
+The monotonicity inequality is exposed separately as:
 
 ```lean
 stationaryW12LocMonotonicity_euclidean
@@ -73,7 +86,8 @@ bundles the first-variation identity together with a `W12LocMapWitness`.
 | Thin-shell control | `radialOpenShellsVolumeTendstoZero_euclidean` | Supplies the absolute-continuity input for radius-variable energies. |
 | Boundary-to-monotonicity step | `weakTheta_increment_eq_weakMonotonicityRhs_of_boundary_forWeights` | Converts the a.e. boundary identity into the monotonicity increment formula. |
 | Arbitrary center reduction | `weakTheta_le_of_arbitrary_center_W12Loc_euclidean` | Translates the origin-centered theorem to an arbitrary center. |
-| Final theorem | `stationaryW12LocMonotonicity_euclidean` | Exposes the packaged public monotonicity statement. |
+| Final formula | `stationaryW12LocMonotonicityFormula_euclidean` | Exposes the packaged public monotonicity increment formula. |
+| Final theorem | `stationaryW12LocMonotonicity_euclidean` | Exposes the packaged public monotonicity inequality. |
 
 The route theorems in the radial, coarea, cutoff, and boundary files are
 internal scaffolding. They are kept because they document and verify the proof

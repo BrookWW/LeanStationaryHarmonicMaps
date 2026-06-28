@@ -428,6 +428,67 @@ theorem weakTheta_monotone_from_W12Loc_euclidean
     hR0_nonneg hmap hΩ_meas hclosedBall_subset
     (ballIntegralRadiusWeightedRepresentationForWeights_euclidean n)
 
+/-- Fully Euclidean weak-map increment formula in the origin-centered form.
+
+This is the equality form of the monotonicity formula:
+`weakTheta r - weakTheta s` is the annular radial-energy term
+`weakMonotonicityRhs s r`. -/
+theorem weakTheta_increment_eq_weakMonotonicityRhs_from_W12Loc_euclidean
+    {n m : ℕ} [NeZero n]
+    {u : Domain n → Target m} {Du : Domain n → Gradient n m} {Ω : Set (Domain n)}
+    {R0 s r : ℝ}
+    (hmap : WeakStationaryMapIn u Du Ω)
+    (hΩ_meas : MeasurableSet Ω)
+    (hclosedBall_subset : Metric.closedBall (0 : Domain n) R0 ⊆ Ω)
+    (hs_pos : 0 < s)
+    (hsr : s < r)
+    (hr_lt : r < R0) :
+    weakTheta Du (0 : Domain n) r - weakTheta Du (0 : Domain n) s =
+      weakMonotonicityRhs Du (0 : Domain n) s r := by
+  have hR0_nonneg : 0 ≤ R0 := le_of_lt ((hs_pos.trans hsr).trans hr_lt)
+  have hthin : RadialOpenShellsVolumeTendstoZero n :=
+    radialOpenShellsVolumeTendstoZero_euclidean n
+  have hcoarea : BallIntegralRadiusDerivativeFormulaForWeights n :=
+    ballIntegralRadiusDerivativeFormulaForWeights_of_weightedRepresentation_identified
+      (n := n) (ballIntegralRadiusWeightedRepresentationForWeights_euclidean n)
+  have hradius : WeakRadiusIntegralFormulasForWeights Du R0 :=
+    weakRadiusIntegralFormulasForWeights_of_W12LocIn_coarea
+      (n := n) (m := m) (u := u) (Du := Du) (Ω := Ω) (R0 := R0)
+      hcoarea hmap.1 hclosedBall_subset
+  have hac : WeakEnergyAbsolutelyContinuousOnRadii Du R0 :=
+    weakEnergyAbsolutelyContinuousOnRadii_of_W12LocIn_radialShellsVolume
+      (n := n) (m := m) (u := u) (Du := Du) (Ω := Ω) (R0 := R0)
+      hthin hmap.1 hclosedBall_subset
+  have hdefect_loc :
+      LocallyIntegrableOn
+        (fun rho : ℝ => weakSharpCutoffDefect Du (0 : Domain n) rho)
+        (Ioo (0 : ℝ) R0) volume :=
+    weakSharpCutoffDefect_locallyIntegrableOn_of_radius_ac
+      (n := n) (m := m) (Du := Du) (R0 := R0) hac
+  have hball_subset : Metric.ball (0 : Domain n) R0 ⊆ Ω :=
+    (Metric.ball_subset_closedBall : Metric.ball (0 : Domain n) R0 ⊆
+      Metric.closedBall (0 : Domain n) R0).trans hclosedBall_subset
+  have hstationary_ball :
+      WeakStationaryIn Du (Metric.ball (0 : Domain n) R0) :=
+    weakStationaryIn_of_subset
+      (n := n) (m := m) (Du := Du)
+      (Ω := Ω) (Ω' := Metric.ball (0 : Domain n) R0)
+      hmap.2 hΩ_meas hball_subset
+  have hcalc : WeakBallEnergyOneDimensionalCalculus Du R0 :=
+    weakBallEnergyOneDimensionalCalculus_of_radiusIntegralForWeights_W12LocIn_radialShellsVolume
+      (n := n) (m := m) (u := u) (Du := Du) (Ω := Ω) (R0 := R0)
+      hR0_nonneg hthin hmap.1 hclosedBall_subset hradius.1 hradius.2
+  have hboundary : WeakBoundaryIdentity Du (0 : Domain n) R0 :=
+    weak_boundary_identity_from_stationarity_of_W12Loc_via_primitivesForWeights
+      (n := n) (m := m) (u := u) (Du := Du) (Ω := Ω) (R0 := R0)
+      hR0_nonneg hstationary_ball hmap.1 hclosedBall_subset
+      hradius.1 hradius.2 hdefect_loc hcalc
+      (weakPrimitiveCutoffRealization R0)
+  exact
+    weakTheta_increment_eq_weakMonotonicityRhs_of_boundary_forWeights
+      (n := n) (m := m) (Du := Du) (R0 := R0) (s := s) (r := r)
+      hboundary hac hradius.2 hs_pos hsr hr_lt
+
 /-- Final packaged weak-map interface with the primitive-cutoff realization
 constructed from interval integrals and smooth bumps.  The remaining
 one-dimensional inputs are the energy IBP formula and its integrability side

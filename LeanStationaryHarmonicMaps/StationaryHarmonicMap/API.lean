@@ -23,7 +23,9 @@ The main user-facing objects are:
 * `DomainVariationStationaryIn`
 * `W12LocMapWitness`
 * `StationaryW12LocMap`
+* `stationaryW12LocMonotonicityFormula_euclidean`
 * `stationaryW12LocMonotonicity_euclidean`
+* `stationarySobolevMonotonicityFormula_euclidean`
 * `stationarySobolevMonotonicity_euclidean`
 
 Implementation-route theorems in the radial/coarea files should normally be
@@ -32,6 +34,37 @@ treated as internal scaffolding.
 
 namespace LeanStationaryHarmonicMaps
 namespace StationaryHarmonicMap
+
+/-- Componentwise convenience wrapper for the witness-style monotonicity
+formula.
+
+The preferred public API is `stationaryW12LocMonotonicityFormula_euclidean`,
+where the chosen weak gradient is bundled in a `StationaryW12LocMap`.  This
+theorem keeps the old componentwise calling style by constructing that witness
+package first. -/
+theorem stationarySobolevMonotonicityFormula_euclidean
+    {n m : Nat} [NeZero n]
+    {u : Domain n -> Target m} {Du : Domain n -> Gradient n m}
+    {Omega : Set (Domain n)} {a : Domain n} {R0 s r : Real}
+    (hu_memLp : LocallyMemLpTwoIn u Omega)
+    (hDu_aesm : GradientAEStronglyMeasurableIn Du Omega)
+    (hDu_memLp : LocallyMemLpTwoIn Du Omega)
+    (hweakGradient : DistributionalWeakGradientIn u Du Omega)
+    (hfirstVariation : DomainVariationStationaryIn u Du Omega)
+    (hOmega_meas : MeasurableSet Omega)
+    (hclosedBall_subset : Set.Subset (Metric.closedBall a R0) Omega)
+    (hs_pos : 0 < s)
+    (hsr : s < r)
+    (hr_lt : r < R0) :
+    weakTheta Du a r - weakTheta Du a s =
+      weakMonotonicityRhs Du a s r :=
+  stationaryW12LocMonotonicityFormula_euclidean
+    (n := n) (m := m) (u := u) (Omega := Omega)
+    (StationaryW12LocMap.of_components
+      (u := u) (Du := Du) (Omega := Omega)
+      hu_memLp hDu_aesm hDu_memLp hweakGradient hfirstVariation)
+    (a := a) (R0 := R0) (s := s) (r := r)
+    hOmega_meas hclosedBall_subset hs_pos hsr hr_lt
 
 /-- Componentwise convenience wrapper for the witness-style monotonicity
 theorem.
