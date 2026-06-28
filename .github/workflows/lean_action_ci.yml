@@ -5,11 +5,8 @@ on:
   pull_request:
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read # Read access to repository contents
-  pages: write # Write access to GitHub Pages
-  id-token: write # Write access to ID tokens
+  contents: read
 
 jobs:
   build:
@@ -20,6 +17,5 @@ jobs:
       - uses: leanprover/lean-action@v1
       - name: Build public example
         run: lake build LeanStationaryHarmonicMaps.Examples.StationaryMonotonicity
-      - uses: leanprover-community/docgen-action@v1
-        with:
-          build-page: false
+      - name: Build main theorem example
+        run: lake build LeanStationaryHarmonicMaps.Examples.UseMainTheorem
